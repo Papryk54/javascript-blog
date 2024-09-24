@@ -200,49 +200,4 @@ function generateTags() {
 	}
 }
 
-
-	// function generateAuthors() {
-	// 	const articles = document.querySelectorAll(optArticleSelector);
-	// 	for (const article of articles) {
-	// 		const authorWrapper = article.querySelector('.post-author');
-	// 		const authorName = article.getAttribute('data-author');
-	
-	// 		// Usuń istniejącego autora z wrappera
-	// 		authorWrapper.innerHTML = '';
-	
-	// 		// Stwórz link do autora
-	// 		const authorLinkHTML = '<a href="#author-' + authorName + '">' + authorName + '</a>';
-	// 		authorWrapper.innerHTML = authorLinkHTML;
-	// 	}
-	// }
-	
-	// function authorClickHandler(event) {
-	// 	event.preventDefault();
-	// 	const clickedElement = this;
-	// 	const authorName = clickedElement.getAttribute('href').replace('#author-', '');
-	
-	// 	// Usunięcie aktywnych linków
-	// 	const activeAuthorLinks = document.querySelectorAll('a.active[href^="#author-"]');
-	// 	for (const activeAuthorLink of activeAuthorLinks) {
-	// 		activeAuthorLink.classList.remove('active');
-	// 	}
-	
-	// 	// Dodanie klasy active do klikniętego linku
-	// 	clickedElement.classList.add('active');
-	
-	// 	// Generowanie przefiltrowanej listy artykułów
-	// 	generateTitleLinks('article[data-author="' + authorName + '"]');
-	// }
-	
-	// function addClickListenersToAuthors() {
-	// 	const authorLinks = document.querySelectorAll('.post-author a');
-	// 	for (const authorLink of authorLinks) {
-	// 		authorLink.addEventListener('click', authorClickHandler);
-	// 	}
-	// }
-	
-	// // Wywołanie funkcji generujących
-	// generateAuthors();
-	// addClickListenersToAuthors();
-	
 }
