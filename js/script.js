@@ -43,7 +43,7 @@
 		optTitleListSelector = ".titles",
 		optArticleTagsSelector = ".post-tags .list",
 		optArticleAuthorSelector = ".post-author",
-		optAuthorsListSelector = 1,
+		optAuthorsListSelector = ".list.authors",
 		optTagsListSelector = ".tags.list", // dlaczego zapisane są razem?
 		optCloudClassCount = 5,
 		optCloudClassPrefix = "tag-size-";
@@ -151,7 +151,6 @@
 			const tagsParams = calculateTagsParams(allTags);
 			let allTagsHTML = "";
 
-			console.log(tagsParams);
 			/* [NEW] START LOOP: for each tag in allTags: */
 			for (let tag in allTags) {
 				/* [NEW] generate code of a link and add it to allTagsHTML */
@@ -275,37 +274,71 @@
 	}
 
 	function addClickListenersToAuthors() {
-		/* find all links to authors */
+		/* find all links to authors in posts */
 		const authorLinks = document.querySelectorAll(".post-author a");
+		// add constant that's value is authors from authors list
+		const authorsListLinks = document.querySelectorAll(".list.authors a");
+		// combine both authorLinks and authorsListLinks into one array
+		const allAuthorLinks = [...authorLinks, ...authorsListLinks];
+
 		/* START LOOP: for each link */
-		for (const authorLink of authorLinks) {
+		for (const authorLink of allAuthorLinks) {
 			/* add authorClickHandler as event listener for that link */
 			authorLink.addEventListener("click", authorClickHandler);
 			/* END LOOP: for each link */
 		}
 	}
+
 	// addClickListenersToAuthors(); A tu już to nie działa
 
 	function generateAuthors() {
+		/* [NEW] create a new variable allAuthors with an empty object */
+		let allAuthors = {};
 		/* find all articles */
 		const articles = document.querySelectorAll(optArticleSelector);
 		/* START LOOP: for every article: */
 		for (const article of articles) {
-			/* find authorss wrapper */
+			/* find authors wrapper */
 			const titleList = article.querySelector(optArticleAuthorSelector);
 			/* make html variable with empty string */
 			let html = "";
-			/* get authors from data-authors attribute */
+			/* get author from data-author attribute */
 			const articleAuthor = article.getAttribute("data-author");
+
 			/* generate HTML of the link */
 			const linkHTML =
 				'<a href="#author-' + articleAuthor + '">' + articleAuthor + "</a>";
 			/* add generated code to html variable */
 			html += linkHTML;
-			/* insert HTML of all the links into the authors wrapper */
+
+			/* [NEW] check if this author is NOT already in allAuthors */
+			if (!allAuthors[articleAuthor]) {
+				/* [NEW] add author to allAuthors object */
+				allAuthors[articleAuthor] = 1; // zlicza wystąpienia autora
+			} else {
+				allAuthors[articleAuthor]++;
+			}
+			/* insert HTML of the author link into the authors wrapper */
 			titleList.innerHTML = html;
 			/* END LOOP: for every article: */
 		}
+
+		/* [NEW] find list of authors in right column */
+		const authorsList = document.querySelector(optAuthorsListSelector);
+
+		/* [NEW] create variable for all links HTML code */
+		let allAuthorsHTML = "";
+
+		/* [NEW] START LOOP: for each author in allAuthors: */
+		for (let author in allAuthors) {
+			/* [NEW] generate code of a link and add it to allAuthorsHTML */
+			allAuthorsHTML +=
+				'<a href="#author-' + author + '">' + author + " </a><br>";
+		}
+		/* [NEW] END LOOP: for each author in allAuthors: */
+
+		/*[NEW] add HTML from allAuthorsHTML to authorsList */
+		authorsList.innerHTML = allAuthorsHTML;
 		addClickListenersToAuthors(); //Dlaczego musiałem przenieść tą funkcję tutaj???
 	}
 

@@ -17,8 +17,12 @@ $font-text: "Source Sans Pro", sans-serif;
 	box-sizing: border-box;
 }
 
+.authors {
+	display: inline;
+}
+
 .tags {
-	//	display: inline;
+	display: inline;
 }
 
 .tag-size-1 {
