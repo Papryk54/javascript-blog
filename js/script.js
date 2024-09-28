@@ -43,7 +43,10 @@
 		optTitleListSelector = ".titles",
 		optArticleTagsSelector = ".post-tags .list",
 		optArticleAuthorSelector = ".post-author",
-		optTagsListSelector = ".tags.list"; // chyba powinny byc oddzielone
+		optAuthorsListSelector = 1,
+		optTagsListSelector = ".tags.list", // dlaczego zapisane są razem?
+		optCloudClassCount = 5,
+		optCloudClassPrefix = "tag-size-";
 
 	function generateTitleLinks(customSelector = "") {
 		/* remove contents of titleList */
@@ -89,9 +92,30 @@
 
 	generateTitleLinks();
 
+	function calculateTagsParams(tags) {
+		const params = { max: 0, min: 999999 };
+		for (let tag in tags) {
+			if (tags[tag] > params.max) {
+				params.max = tags[tag];
+			}
+			if (tags[tag] < params.min) {
+				params.min = tags[tag];
+			}
+		}
+		return params;
+	}
+
+	function calculateTagClass(count, params) {
+		const normalizedCount = count - params.min;
+		const normalizedMax = params.max - params.min;
+		const percentage = normalizedCount / normalizedMax;
+		const classNumber = Math.floor(percentage * (optCloudClassCount - 1) + 1);
+		return optCloudClassPrefix + classNumber;
+	}
+
 	function generateTags() {
 		/* [NEW] create a new variable allTags with an empty array */
-		let allTags = [];
+		let allTags = {};
 		/* find all articles */
 		const articles = document.querySelectorAll(optArticleSelector);
 		/* START LOOP: for every article: */
@@ -112,17 +136,39 @@
 				/* add generated code to html variable */
 				html += " " + linkHTML;
 				/* [NEW] check if this link is NOT already in allTags */
-				if(allTags.indexOf(linkHTML) == -1){
-					/* [NEW] add generated code to allTags array */
-					allTags.push(linkHTML);
+				if (!allTags[tag]) {
+					/* [NEW] add tag to allTags object */
+					allTags[tag] = 1;
+				} else {
+					allTags[tag]++;
 				}
 				/* END LOOP: for each tag */
 			}
 			/* [NEW] find list of tags in right column */
-  		const tagList = document.querySelector(optTagsListSelector);
+			const tagList = document.querySelector(optTagsListSelector);
 
- 			 /* [NEW] add html from allTags to tagList */
-  		tagList.innerHTML = allTags.join(' ');
+			/* [NEW] create variable for all links HTML code */
+			const tagsParams = calculateTagsParams(allTags);
+			let allTagsHTML = "";
+
+			console.log(tagsParams);
+			/* [NEW] START LOOP: for each tag in allTags: */
+			for (let tag in allTags) {
+				/* [NEW] generate code of a link and add it to allTagsHTML */
+				allTagsHTML +=
+					'<a href="#tag-' +
+					tag +
+					'" class="' +
+					calculateTagClass(allTags[tag], tagsParams) +
+					'">' +
+					tag +
+					" " + // po co mi potrzebna ta spacja? bez niej wszystkie tagi ustawiwają się obok siebie
+					"</a>";
+			}
+			/* [NEW] END LOOP: for each tag in allTags: */
+
+			/*[NEW] add HTML from allTagsHTML to tagList */
+			tagList.innerHTML = allTagsHTML;
 			/* insert HTML of all the links into the tags wrapper */
 
 			titleList.innerHTML = html;
@@ -174,8 +220,12 @@
 	function addClickListenersToTags() {
 		/* find all links to tags */
 		const tagLinks = document.querySelectorAll(".post-tags a");
+		// add constant that's value is tags from tags cloud
+		const tagCloudLinks = document.querySelectorAll(".tags.list a");
+		// combine both tagLinks and tagCloudLinks into one array
+		const allTagLinks = [...tagLinks, ...tagCloudLinks];
 		/* START LOOP: for each link */
-		for (const tagLink of tagLinks) {
+		for (const tagLink of allTagLinks) {
 			/* add tagClickHandler as event listener for that link */
 			tagLink.addEventListener("click", tagClickHandler);
 			/* END LOOP: for each link */
