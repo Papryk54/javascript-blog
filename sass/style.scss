@@ -22,6 +22,10 @@ $font-text: "Source Sans Pro", sans-serif;
 }
 
 .tags {
+	display: block;
+}
+
+.tags li {
 	display: inline;
 }
 
