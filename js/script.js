@@ -67,6 +67,7 @@
 		const articles = document.querySelectorAll(
 			optArticleSelector + customSelector
 		);
+		console.log(articles, optArticleSelector + customSelector)
 		for (const article of articles) {
 			/* get the article id */
 			const articleId = article.getAttribute("id");
@@ -79,7 +80,7 @@
 
 			/* create HTML of the link */
 
-			const linkHTMLData = {id: articleId, title: articleTitle, tags:[], author}; //powiedział że mam tu wyszukać dla każdego artykułu taki i autorów i nie mam pojęcia co dalej nic nie rozumiem
+			const linkHTMLData = {id: articleId, title: articleTitle};
 			const linkHTML = templates.articleLink(linkHTMLData);
 			/* insert link into titleList */
 
@@ -241,11 +242,11 @@
 		const clickedElement = this;
 
 		/* make a new constant "href" and read the attribute "href" of the clicked element */
-		const href = clickedElement.getAttribute("href");
-		console.log(href)
+		const href = clickedElement.getAttribute("href"); 
+		console.log(href) //#
 		/* make a new constant "author" and extract author from the "href" constant */
 		const author = href.split("-")[1];
-		console.log(author);
+		console.log(author); //undefined
 		/* find all author links with class active */
 		const activeAuthorLinks = document.querySelectorAll(
 			'a.active[href^="#author-"]'
@@ -289,8 +290,6 @@
 		}
 	}
 
-	// addClickListenersToAuthors(); A tu już to nie działa
-
 	function generateAuthors() {
 		/* [NEW] create a new variable allAuthors with an empty object */
 		let allAuthors = {};
@@ -327,13 +326,11 @@
 		const authorsList = document.querySelector(optAuthorsListSelector);
 
 		/* [NEW] create variable for all links HTML code */
-		// [STEP 1] let allAuthorsHTML = "";
 		const allAuthorsData = {authors: []};
 
 		/* [NEW] START LOOP: for each author in allAuthors: */
 		for (let author in allAuthors) {
 			/* [NEW] generate code of a link and add it to allAuthorsHTML */
-		// 	[STEP 2] allAuthorsHTML +=
 		// 		'<a href="#author-' + author + '">' + author + " </a><br>";
 		// }
 		const authorsParams = calculateTagsParams(allAuthors);
@@ -345,7 +342,6 @@
 		/* [NEW] END LOOP: for each author in allAuthors: */
 
 		/*[NEW] add HTML from allAuthorsHTML to authorsList */
-		// [STEP 3]
 		authorsList.innerHTML = templates.authorCloudLink(allAuthorsData);
 		addClickListenersToAuthors();
 		}
