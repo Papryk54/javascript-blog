@@ -67,7 +67,7 @@
 		const articles = document.querySelectorAll(
 			optArticleSelector + customSelector
 		);
-		console.log(articles, optArticleSelector + customSelector)
+
 		for (const article of articles) {
 			/* get the article id */
 			const articleId = article.getAttribute("id");
@@ -243,10 +243,8 @@
 
 		/* make a new constant "href" and read the attribute "href" of the clicked element */
 		const href = clickedElement.getAttribute("href"); 
-		console.log(href) //#
 		/* make a new constant "author" and extract author from the "href" constant */
 		const author = href.split("-")[1];
-		console.log(author); //undefined
 		/* find all author links with class active */
 		const activeAuthorLinks = document.querySelectorAll(
 			'a.active[href^="#author-"]'
